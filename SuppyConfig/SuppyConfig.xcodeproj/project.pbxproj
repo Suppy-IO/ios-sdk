@@ -103,7 +103,13 @@
 		29E8E9D924E4EFCB0091D96C = {
 			isa = PBXGroup;
 			children = (
-				29E8E9E424E4EFCB0091D96C /* Source */,
+				29E8EA0724E4F4350091D96C /* ConfigFetcher.swift */,
+				29E8EA0E24E4F4350091D96C /* Context.swift */,
+				29CD7EDF24EBA879000F0674 /* DataFetchable.swift */,
+				29CD7EBF24E7B58E000F0674 /* RetryExecutor.swift */,
+				29E8EA0424E4F4350091D96C /* Model.swift */,
+				29CD7EE824EBDDD2000F0674 /* Persistence.swift */,
+				29E8E9E524E4EFCB0091D96C /* SuppyConfig.swift */,
 				29BE29B724ED3BA600B471C3 /* Tests */,
 				29E8E9E324E4EFCB0091D96C /* Products */,
 			);
@@ -116,20 +122,6 @@
 				29E8EA2324E4F8B40091D96C /* Tests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		29E8E9E424E4EFCB0091D96C /* Source */ = {
-			isa = PBXGroup;
-			children = (
-				29E8EA0724E4F4350091D96C /* ConfigFetcher.swift */,
-				29E8EA0E24E4F4350091D96C /* Context.swift */,
-				29CD7EDF24EBA879000F0674 /* DataFetchable.swift */,
-				29CD7EBF24E7B58E000F0674 /* RetryExecutor.swift */,
-				29E8EA0424E4F4350091D96C /* Model.swift */,
-				29CD7EE824EBDDD2000F0674 /* Persistence.swift */,
-				29E8E9E524E4EFCB0091D96C /* SuppyConfig.swift */,
-			);
-			path = Source;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
