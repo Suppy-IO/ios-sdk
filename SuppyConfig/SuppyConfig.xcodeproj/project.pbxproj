@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		299D0CC924ED7F9200C36FC2 /* DataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29BD24ED3BA600B471C3 /* DataTests.swift */; };
 		29BE29BE24ED3BA600B471C3 /* MockDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29B924ED3BA600B471C3 /* MockDataFetcher.swift */; };
 		29BE29BF24ED3BA600B471C3 /* MockContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29BA24ED3BA600B471C3 /* MockContextFactory.swift */; };
 		29BE29C024ED3BA600B471C3 /* FetchWithRetryExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29BB24ED3BA600B471C3 /* FetchWithRetryExecutorTests.swift */; };
-		29BE29C224ED3BA600B471C3 /* DataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29BD24ED3BA600B471C3 /* DataTests.swift */; };
 		29CD7EC024E7B58E000F0674 /* RetryExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD7EBF24E7B58E000F0674 /* RetryExecutor.swift */; };
 		29CD7EE124EBA885000F0674 /* DataFetchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD7EDF24EBA879000F0674 /* DataFetchable.swift */; };
 		29CD7EE924EBDDD2000F0674 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD7EE824EBDDD2000F0674 /* Persistence.swift */; };
@@ -252,7 +252,7 @@
 				29BE29BF24ED3BA600B471C3 /* MockContextFactory.swift in Sources */,
 				29BE29C024ED3BA600B471C3 /* FetchWithRetryExecutorTests.swift in Sources */,
 				29BE29BE24ED3BA600B471C3 /* MockDataFetcher.swift in Sources */,
-				29BE29C224ED3BA600B471C3 /* DataTests.swift in Sources */,
+				299D0CC924ED7F9200C36FC2 /* DataTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
