@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "SuppyConfig"
-  s.version      = "1.0.1"
+  s.version      = "1.0.2"
   s.summary      = "SuppyConfig allows you to manage frontend configurations in the Suppy.IO cloud."
   s.homepage     = "https://suppy.io"
   s.license      = { :type => "BSD", :file => "LICENSE.md" }
