@@ -3,7 +3,7 @@
 //  Tests
 //
 //  Created by Ricardo Rautalahti-Hazan on 18.8.2020.
-//  Copyright © 2020 Suppy.io. All rights reserved.
+//  Copyright © 2020 Suppy.io - All rights reserved.
 //
 
 import XCTest

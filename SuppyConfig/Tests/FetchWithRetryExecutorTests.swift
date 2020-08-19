@@ -1,5 +1,5 @@
 //
-//  Copyright © 2020 Suppy.IO - All rights reserved.
+//  Copyright © 2020 Suppy.io - All rights reserved.
 //
 
 import XCTest
