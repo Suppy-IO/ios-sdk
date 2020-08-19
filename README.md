@@ -91,7 +91,7 @@ let suppyConfig = SuppyConfig(configId: "1234",
                               applicationName: "IOS Client", 
                               dependencies: dependencies
                               
-suppy.fetchConfiguration {
+suppyConfig.fetchConfiguration {
     let defaults = UserDefaults.standard
     
     let string = defaults.string(forKey: "String Configuration")
