@@ -27,7 +27,7 @@ $ pod install
 ```
 
 ## Usage
-This library supports iOS and iPadOS 10.0 and above.
+This library supports iOS 10.0 and iPadOS 14.0 and above.
 
 #### Imports
 Swift: `import SuppyConfig`  
