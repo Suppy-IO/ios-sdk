@@ -1,5 +1,4 @@
 Pod::Spec.new do |s|
-
   s.name         = "SuppyConfig"
   s.version      = "1.0.2"
   s.summary      = "SuppyConfig allows you to manage frontend configurations in the Suppy.IO cloud."
@@ -13,7 +12,7 @@ Pod::Spec.new do |s|
   s.swift_version = '4.2'
 
   s.test_spec 'Tests' do |test_spec|
-    test_spec.source_files = 'Tests/*.swift'
+    test_spec.source_files = 'Tests/**/*.swift'
   end 
 end
 
