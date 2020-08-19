@@ -1,0 +1,14 @@
+//
+//  Copyright © 2020 Suppy.IO - All rights reserved.
+//
+
+import Foundation
+
+@testable import SuppyConfig
+
+internal class MockContextFactory {
+
+    class func mock(dependencies: [String: Any] = [:]) -> Context {
+        return Context(configId: "", applicationName: "", dependencies: dependencies)
+    }
+}
