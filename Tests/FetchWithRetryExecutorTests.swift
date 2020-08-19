@@ -6,7 +6,7 @@ import XCTest
 
 @testable import SuppyConfig
 
-class FetchWithRetryExecutorTests: XCTestCase {
+class RetryExecutorTests: XCTestCase {
 
     func testRetriesMaxOut() {
         let attempts = 10

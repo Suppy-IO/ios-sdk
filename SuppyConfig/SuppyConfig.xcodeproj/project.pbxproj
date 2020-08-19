@@ -7,18 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		29BE29BE24ED3BA600B471C3 /* MockDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29B924ED3BA600B471C3 /* MockDataFetcher.swift */; };
+		29BE29BF24ED3BA600B471C3 /* MockContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29BA24ED3BA600B471C3 /* MockContextFactory.swift */; };
+		29BE29C024ED3BA600B471C3 /* FetchWithRetryExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29BB24ED3BA600B471C3 /* FetchWithRetryExecutorTests.swift */; };
+		29BE29C224ED3BA600B471C3 /* DataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29BD24ED3BA600B471C3 /* DataTests.swift */; };
 		29CD7EC024E7B58E000F0674 /* RetryExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD7EBF24E7B58E000F0674 /* RetryExecutor.swift */; };
 		29CD7EE124EBA885000F0674 /* DataFetchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD7EDF24EBA879000F0674 /* DataFetchable.swift */; };
-		29CD7EE524EBAC14000F0674 /* DataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD7EE424EBAC14000F0674 /* DataTests.swift */; };
 		29CD7EE924EBDDD2000F0674 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD7EE824EBDDD2000F0674 /* Persistence.swift */; };
 		29E8E9E624E4EFCB0091D96C /* SuppyConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8E9E524E4EFCB0091D96C /* SuppyConfig.swift */; };
 		29E8EA1124E4F4360091D96C /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8EA0424E4F4350091D96C /* Model.swift */; };
 		29E8EA1424E4F4360091D96C /* ConfigFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8EA0724E4F4350091D96C /* ConfigFetcher.swift */; };
 		29E8EA1B24E4F4360091D96C /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8EA0E24E4F4350091D96C /* Context.swift */; };
 		29E8EA2824E4F8B40091D96C /* libSuppyConfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 29E8E9E224E4EFCB0091D96C /* libSuppyConfig.a */; };
-		29E8EA3C24E503760091D96C /* FetchWithRetryExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8EA3024E503760091D96C /* FetchWithRetryExecutorTests.swift */; };
-		29E8EA4124E503760091D96C /* MockDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8EA3624E503760091D96C /* MockDataFetcher.swift */; };
-		29E8EA4224E503760091D96C /* MockContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8EA3724E503760091D96C /* MockContextFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,10 +44,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		29CD7EB024E55B94000F0674 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		29BE29B924ED3BA600B471C3 /* MockDataFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDataFetcher.swift; sourceTree = "<group>"; };
+		29BE29BA24ED3BA600B471C3 /* MockContextFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockContextFactory.swift; sourceTree = "<group>"; };
+		29BE29BB24ED3BA600B471C3 /* FetchWithRetryExecutorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchWithRetryExecutorTests.swift; sourceTree = "<group>"; };
+		29BE29BC24ED3BA600B471C3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		29BE29BD24ED3BA600B471C3 /* DataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataTests.swift; sourceTree = "<group>"; };
 		29CD7EBF24E7B58E000F0674 /* RetryExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryExecutor.swift; sourceTree = "<group>"; };
 		29CD7EDF24EBA879000F0674 /* DataFetchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetchable.swift; sourceTree = "<group>"; };
-		29CD7EE424EBAC14000F0674 /* DataTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataTests.swift; sourceTree = "<group>"; };
 		29CD7EE824EBDDD2000F0674 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		29E8E9E224E4EFCB0091D96C /* libSuppyConfig.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libSuppyConfig.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		29E8E9E524E4EFCB0091D96C /* SuppyConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuppyConfig.swift; sourceTree = "<group>"; };
@@ -55,9 +58,6 @@
 		29E8EA0724E4F4350091D96C /* ConfigFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConfigFetcher.swift; sourceTree = "<group>"; };
 		29E8EA0E24E4F4350091D96C /* Context.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Context.swift; sourceTree = "<group>"; };
 		29E8EA2324E4F8B40091D96C /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		29E8EA3024E503760091D96C /* FetchWithRetryExecutorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchWithRetryExecutorTests.swift; sourceTree = "<group>"; };
-		29E8EA3624E503760091D96C /* MockDataFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDataFetcher.swift; sourceTree = "<group>"; };
-		29E8EA3724E503760091D96C /* MockContextFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockContextFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,11 +79,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		29BE29B724ED3BA600B471C3 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				29BE29B824ED3BA600B471C3 /* Mocks */,
+				29BE29BB24ED3BA600B471C3 /* FetchWithRetryExecutorTests.swift */,
+				29BE29BC24ED3BA600B471C3 /* Info.plist */,
+				29BE29BD24ED3BA600B471C3 /* DataTests.swift */,
+			);
+			name = Tests;
+			path = ../Tests;
+			sourceTree = "<group>";
+		};
+		29BE29B824ED3BA600B471C3 /* Mocks */ = {
+			isa = PBXGroup;
+			children = (
+				29BE29B924ED3BA600B471C3 /* MockDataFetcher.swift */,
+				29BE29BA24ED3BA600B471C3 /* MockContextFactory.swift */,
+			);
+			path = Mocks;
+			sourceTree = "<group>";
+		};
 		29E8E9D924E4EFCB0091D96C = {
 			isa = PBXGroup;
 			children = (
 				29E8E9E424E4EFCB0091D96C /* Source */,
-				29E8EA2424E4F8B40091D96C /* Tests */,
+				29BE29B724ED3BA600B471C3 /* Tests */,
 				29E8E9E324E4EFCB0091D96C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -109,26 +130,6 @@
 				29E8E9E524E4EFCB0091D96C /* SuppyConfig.swift */,
 			);
 			path = Source;
-			sourceTree = "<group>";
-		};
-		29E8EA2424E4F8B40091D96C /* Tests */ = {
-			isa = PBXGroup;
-			children = (
-				29CD7EE424EBAC14000F0674 /* DataTests.swift */,
-				29E8EA3024E503760091D96C /* FetchWithRetryExecutorTests.swift */,
-				29CD7EB024E55B94000F0674 /* Info.plist */,
-				29E8EA3524E503760091D96C /* Mocks */,
-			);
-			path = Tests;
-			sourceTree = "<group>";
-		};
-		29E8EA3524E503760091D96C /* Mocks */ = {
-			isa = PBXGroup;
-			children = (
-				29E8EA3624E503760091D96C /* MockDataFetcher.swift */,
-				29E8EA3724E503760091D96C /* MockContextFactory.swift */,
-			);
-			path = Mocks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,10 +257,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				29CD7EE524EBAC14000F0674 /* DataTests.swift in Sources */,
-				29E8EA4224E503760091D96C /* MockContextFactory.swift in Sources */,
-				29E8EA3C24E503760091D96C /* FetchWithRetryExecutorTests.swift in Sources */,
-				29E8EA4124E503760091D96C /* MockDataFetcher.swift in Sources */,
+				29BE29BF24ED3BA600B471C3 /* MockContextFactory.swift in Sources */,
+				29BE29C024ED3BA600B471C3 /* FetchWithRetryExecutorTests.swift in Sources */,
+				29BE29BE24ED3BA600B471C3 /* MockDataFetcher.swift in Sources */,
+				29BE29C224ED3BA600B471C3 /* DataTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,7 +325,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -378,7 +379,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -419,7 +420,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Y6JS92YK87;
-				INFOPLIST_FILE = Tests/Info.plist;
+				INFOPLIST_FILE = ../Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -438,7 +439,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Y6JS92YK87;
-				INFOPLIST_FILE = Tests/Info.plist;
+				INFOPLIST_FILE = ../Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
