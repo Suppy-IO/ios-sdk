@@ -11,6 +11,7 @@
 		29BE29BE24ED3BA600B471C3 /* MockDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29B924ED3BA600B471C3 /* MockDataFetcher.swift */; };
 		29BE29BF24ED3BA600B471C3 /* MockContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29BA24ED3BA600B471C3 /* MockContextFactory.swift */; };
 		29BE29C024ED3BA600B471C3 /* FetchWithRetryExecutorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29BB24ED3BA600B471C3 /* FetchWithRetryExecutorTests.swift */; };
+		29CD3EE824EE4C7A002F97EE /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD3EE724EE4C7A002F97EE /* Logger.swift */; };
 		29CD7EC024E7B58E000F0674 /* RetryExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD7EBF24E7B58E000F0674 /* RetryExecutor.swift */; };
 		29CD7EE124EBA885000F0674 /* DataFetchable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD7EDF24EBA879000F0674 /* DataFetchable.swift */; };
 		29CD7EE924EBDDD2000F0674 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD7EE824EBDDD2000F0674 /* Persistence.swift */; };
@@ -49,6 +50,7 @@
 		29BE29BB24ED3BA600B471C3 /* FetchWithRetryExecutorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FetchWithRetryExecutorTests.swift; sourceTree = "<group>"; };
 		29BE29BC24ED3BA600B471C3 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		29BE29BD24ED3BA600B471C3 /* DataTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataTests.swift; sourceTree = "<group>"; };
+		29CD3EE724EE4C7A002F97EE /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		29CD7EBF24E7B58E000F0674 /* RetryExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RetryExecutor.swift; sourceTree = "<group>"; };
 		29CD7EDF24EBA879000F0674 /* DataFetchable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataFetchable.swift; sourceTree = "<group>"; };
 		29CD7EE824EBDDD2000F0674 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 		29E8E9D924E4EFCB0091D96C = {
 			isa = PBXGroup;
 			children = (
+				29CD3EE724EE4C7A002F97EE /* Logger.swift */,
 				29E8EA0724E4F4350091D96C /* ConfigFetcher.swift */,
 				29E8EA0E24E4F4350091D96C /* Context.swift */,
 				29CD7EDF24EBA879000F0674 /* DataFetchable.swift */,
@@ -242,6 +245,7 @@
 				29CD7EC024E7B58E000F0674 /* RetryExecutor.swift in Sources */,
 				29E8E9E624E4EFCB0091D96C /* SuppyConfig.swift in Sources */,
 				29E8EA1124E4F4360091D96C /* Model.swift in Sources */,
+				29CD3EE824EE4C7A002F97EE /* Logger.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

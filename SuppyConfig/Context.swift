@@ -11,4 +11,6 @@ internal struct Context {
     let applicationName: String
     /// Names and default values for cloud managed properties.
     let dependencies: [String: Any]
+    /// Enables logging 
+    let enableDebugMode: Bool
 }
