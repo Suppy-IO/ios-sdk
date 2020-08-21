@@ -33,7 +33,6 @@ class RetryExecutorTests: XCTestCase {
     }
 
     func testRetriesUntilSuccess() {
-
         let attempts = 10
         let failures = 5
         let expects = 5

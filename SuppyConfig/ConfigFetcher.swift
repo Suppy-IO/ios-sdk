@@ -4,14 +4,18 @@
 
 import Foundation
 
+enum FetchResult {
+    case noData(Int)
+    case newData(Data)
+}
+
 // Types of expected errors that can be discovered while parsing server responses.
 enum FetchError: Error {
     case noResponse
     case invalidStatus(Int)
-    case noData
 }
 
-internal struct ConfigFetcher: DataFetchable {
+internal struct ConfigFetcher: DataFetchExecutor {
 
     private var persistence: Persistence
 
@@ -19,7 +23,7 @@ internal struct ConfigFetcher: DataFetchable {
         self.persistence = persistence
     }
 
-    func execute(context: Context, completion: @escaping (Result<Data, Error>) -> Void) {
+    func execute(context: Context, completion: @escaping (Result<FetchResult, Error>) -> Void) {
         guard let url = createUrl(context: context) else {
             return assertionFailure("unable to create URL")
         }
@@ -35,11 +39,12 @@ internal struct ConfigFetcher: DataFetchable {
         URLSession
             .shared
             .dataTask(with: request, completionHandler: { data, response, error in
+                // stores ETag if present
+                self.persistence.save(etag: response)
+
                 let result = self.resultFromResponse(data: data,
                                                      response: response,
                                                      error: error)
-                self.persistence.save(etag: response)
-                //self.persistence.(response: response)
                 completion(result)
             })
             .resume()
@@ -47,7 +52,7 @@ internal struct ConfigFetcher: DataFetchable {
 
     private func resultFromResponse(data: Data?,
                                     response: URLResponse?,
-                                    error: Error?) -> Result<Data, Error> {
+                                    error: Error?) -> Result<FetchResult, Error> {
         // verifies that we have got no errors during remote call
         if let error = error {
             return .failure(error)
@@ -58,17 +63,28 @@ internal struct ConfigFetcher: DataFetchable {
             return .failure(FetchError.noResponse)
         }
 
-        // verifies that the status code in the HTTP status code SUCCESS range
-        guard (200 ..< 300).contains(httpResponse.statusCode) else {
+        // verifies that the status code in the HTTP status code SUCCESS range 200...299
+        //
+        // OR
+        //
+        // HTTP Status Code 304 - "Not Modified" (RFC 7232)
+        //
+        // Indicates that the resource has not been modified since the version specified by the
+        // request headers If-Modified-Since or If-None-Match. In such case, there is no need to
+        // retransmit the resource since the client still has a previously-downloaded copy.
+        // source: https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
+        guard
+            (200 ..< 300).contains(httpResponse.statusCode) ||
+            httpResponse.statusCode == 304
+        else {
             return .failure(FetchError.invalidStatus(httpResponse.statusCode))
         }
 
-        // verifies that the response contained data to be parsed
-        guard let data = data else {
-            return .failure(FetchError.noData)
+        if let data = data {
+            return .success(.newData(data))
+        } else {
+            return .success(.noData(httpResponse.statusCode))
         }
-
-        return .success(data)
     }
 
     private func createUrl(context: Context) -> URL? {

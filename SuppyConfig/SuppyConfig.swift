@@ -11,10 +11,15 @@ import Foundation
     private let logger: Logger?
 
     internal init(context: Context,
-                  fetcher: RetryExecutor = RetryExecutor(with: ConfigFetcher())) {
+                  fetcher: RetryExecutor? = nil) {
         self.context = context
-        self.fetcher = fetcher
         self.logger = context.enableDebugMode ? Logger() : nil
+
+        if let fetcher = fetcher {
+            self.fetcher = fetcher
+        } else {
+            self.fetcher = RetryExecutor(with: ConfigFetcher(), logger: self.logger)
+        }
 
         /// Registered defaults are never stored between runs of an application.
         ///
@@ -22,6 +27,8 @@ import Foundation
         /// after NSUserDefaults has looked for a value in every other valid location,
         /// it will look in registered defaults.
         UserDefaults.standard.register(defaults: context.dependencies)
+        super.init()
+        self.logger?.debug("anonymous ID: \(anonymousId)")
     }
 }
 
@@ -29,7 +36,7 @@ extension SuppyConfig {
 
     /// UUID that identifies an SDK instance
     public var anonymousId: String {
-        Persistence().anonymousId
+        return Persistence().anonymousId
     }
 
     /// Constructor
@@ -64,106 +71,53 @@ extension SuppyConfig {
         logger?.debug("Executing")
         fetcher.execute(context: context) { result in
             switch result {
-            case let .success(data):
-                self.handleSuccessFetch(data: data)
+            case let .success(fetchResult):
+                self.handleSuccessFetch(fetchResult)
             case let .failure(error):
-                self.handleFailureFetch(error: error)
+                self.logger?.error(error)
             }
             self.logger?.debug("Completed")
             completion?()
         }
     }
 
-    // swiftlint:disable function_body_length
-
     /// Maps the configurations received from the server into the UserDefaults following the dependencies name and type.
-    private func handleSuccessFetch(data: Data) {
-        guard let config = Config.fromData(data) else {
-            logger?.debug(
-                """
-                   Some data was returned but we were unable to parse it.
-                   Data: \(String(data: data, encoding: .utf8) ?? "")
-                """)
-            return
-        }
-
-        let defaults = UserDefaults.standard
-
-        self.context.dependencies.forEach { key, value in
-            guard let attribute = (config.attributes?.first { $0.name == key }) else {
-                logger?.debug("Dependency of name: \"\(key)\" was not returned from the server.")
+    private func handleSuccessFetch(_ fetchResult: FetchResult) {
+        switch fetchResult {
+        case let .newData(data):
+            guard let config = Config.fromData(data) else {
+                logger?.debug(
+                    """
+                       Some data was returned but we were unable to parse it.
+                       Data: \(String(data: data, encoding: .utf8) ?? "")
+                    """)
                 return
             }
 
-            guard let attributeValue = attribute.value else {
-                defaults.set(nil, forKey: attribute.name)
-                logger?.debug("Dependency of name: \"\(key)\" got assigned: nil")
-                return
-            }
+            let defaults = UserDefaults.standard
 
-            let dependencyValueType = type(of: value)
-
-            let handlingResult: String
-            switch dependencyValueType {
-
-            case is URL.Type:
-                // using URL instead of String because default.url resolves to a file scheme otherwise
-                let url = URL(string: attributeValue)
-                handlingResult = "assigned URL: \(String(describing: url?.absoluteString))"
-                defaults.set(url, forKey: attribute.name)
-
-            case is Array<String>.Type:
-                guard
-                    let data = attributeValue.data(using: .utf8),
-                    let decoded = try? JSONSerialization.jsonObject(with: data, options: [])
-                else {
-                    handlingResult = "unable to decode the received data - assigning nil"
-                    defaults.set(nil, forKey: attribute.name)
+            self.context.dependencies.forEach { key, value in
+                guard let attribute = (config.attributes?.first { $0.name == key }) else {
+                    logger?.debug("Dependency of name: \"\(key)\" was not returned from the server.")
                     return
                 }
-                let array = decoded as? [String]
-                handlingResult = "assigned Array<String>: \(String(describing: array))"
-                defaults.set(array, forKey: attribute.name)
 
-            case is Dictionary<String, String>.Type:
-                guard
-                    let data = attributeValue.data(using: .utf8),
-                    let decoded = try? JSONSerialization.jsonObject(with: data, options: [])
-                else {
-                    handlingResult = "unable to decode the received data - assigning nil"
+                guard let attributeValue = attribute.value else {
                     defaults.set(nil, forKey: attribute.name)
+                    logger?.debug("Dependency of name: \"\(key)\" got assigned: nil")
                     return
                 }
-                let dictionary = decoded as? [String: String]
-                handlingResult = "assigned Dictionary<String, String>: \(String(describing: dictionary))"
-                defaults.set(dictionary, forKey: attribute.name)
 
-            default:
-                handlingResult = "assigned value: \(String(describing: attribute.value))"
-                defaults.set(attribute.value, forKey: attribute.name)
+                let dependencyValueType = type(of: value)
+
+                FetchResultHandler(defaults: defaults, logger: logger)
+                    .handle(type: dependencyValueType,
+                            key: key,
+                            value: attributeValue)
+
             }
-
-            logger?.debug(
-                "Handled dependency of name: \"\(key)\" and type \(dependencyValueType)" +
-                " - received value: \(attributeValue) - \(handlingResult)")
-        }
-    }
-
-    private func handleFailureFetch(error: Error) {
-        switch error {
-        case let FetchError.invalidStatus(statusCode):
-            // HTTP Status Code 304 - "Not Modified" (RFC 7232)
-            // Indicates that the resource has not been modified since the version specified by the
-            // request headers If-Modified-Since or If-None-Match. In such case, there is no need to
-            // retransmit the resource since the client still has a previously-downloaded copy.
-            // source: https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
-            if statusCode == 304 {
-                self.logger?.debug("Configuration was not modified since the last fetch.")
-            } else {
-                self.logger?.error(error)
-            }
-        default:
-            self.logger?.error(error)
+        case let .noData(httpStatusCode):
+            logger?.debug("no data received - HTTP status code: \(httpStatusCode)")
         }
     }
 }

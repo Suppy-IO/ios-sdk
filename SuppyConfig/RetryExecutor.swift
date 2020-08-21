@@ -6,21 +6,27 @@ import Foundation
 
 /// Executor that retries upon failure.
 internal struct RetryExecutor {
-    // amount of times a fetcher will be executed
+    /// Amount of times a fetcher will be executed.
     let attempts: Int
-    // amount of delay between executions in case of failures
+    /// Amount of delay between executions in case of failures.
     let delay: DispatchTimeInterval
-    // object that talks to the server
-    let fetcher: DataFetchable
+    /// Object that talks to the server.
+    let fetcher: DataFetchExecutor
+    /// Logs debug messages.
+    let logger: Logger?
 
-    init(attempts: Int = 10, delay: DispatchTimeInterval = .seconds(10), with fetcher: DataFetchable) {
+    init(attempts: Int = 10,
+         delay: DispatchTimeInterval = .seconds(10),
+         with fetcher: DataFetchExecutor,
+         logger: Logger? = nil) {
         self.attempts = attempts
         self.delay = delay
         self.fetcher = fetcher
+        self.logger = logger
     }
 
     func execute(context: Context,
-                 completion: @escaping (Result<Data, Error>) -> Void) {
+                 completion: @escaping (Result<FetchResult, Error>) -> Void) {
         retry(attempts,
               delay: delay,
               task: { result in
@@ -34,8 +40,8 @@ internal struct RetryExecutor {
 
     private func retry(_ attempts: Int,
                        delay: DispatchTimeInterval,
-                       task: @escaping (_ completion: @escaping (Result<Data, Error>) -> Void) -> Void,
-                       completion: @escaping (Result<Data, Error>) -> Void) {
+                       task: @escaping (_ completion: @escaping (Result<FetchResult, Error>) -> Void) -> Void,
+                       completion: @escaping (Result<FetchResult, Error>) -> Void) {
         task({ result in
             switch result {
             case .success:
@@ -44,6 +50,7 @@ internal struct RetryExecutor {
                 guard attempts > 1 else {
                     return completion(result)
                 }
+                logger?.debug("retrying fetch...")
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                     self.retry(attempts - 1, delay: delay, task: task, completion: completion)
                 }

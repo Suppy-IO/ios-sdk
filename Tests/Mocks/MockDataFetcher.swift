@@ -6,20 +6,20 @@ import Foundation
 
 @testable import SuppyConfig
 
-internal class MockDataFetcher: DataFetchable {
+internal class MockDataFetcher: DataFetchExecutor {
 
     var attributes: [Attribute]?
     var dependencies: [String: Any]?
     var numberOfCalls = 0
     var numberOfFailures = 0
 
-    func execute(context: Context, completion: @escaping (Result<Data, Error>) -> Void) {
+    func execute(context: Context, completion: @escaping (Result<FetchResult, Error>) -> Void) {
         numberOfCalls += 1
         if numberOfCalls <  numberOfFailures {
             completion(.failure(FetchError.invalidStatus(418)))
         } else {
             let data = Config.toData(Config(attributes: attributes))
-            completion(.success(data!))
+            completion(.success(FetchResult.newData(data!)))
         }
     }
 }
