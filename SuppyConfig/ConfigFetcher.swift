@@ -80,7 +80,9 @@ internal struct ConfigFetcher: DataFetchExecutor {
             return .failure(FetchError.invalidStatus(httpResponse.statusCode))
         }
 
-        if let data = data {
+        if let data = data,
+           !data.isEmpty
+        {
             return .success(.newData(data))
         } else {
             return .success(.noData(httpResponse.statusCode))
