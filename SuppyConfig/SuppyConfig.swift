@@ -40,7 +40,7 @@ import Foundation
 extension SuppyConfig {
 
     /// UUID that identifies an SDK instance
-    public var anonymousId: String {
+    @objc public var anonymousId: String {
         return Persistence().anonymousId
     }
 
@@ -55,7 +55,7 @@ extension SuppyConfig {
     ///     - configId: Configuration used.
     ///     - applicationName: Application identifier seen in the web interface routing table.
     ///     - dependencies: Configurations required by the application.
-    public convenience init(configId: String,
+    @objc public convenience init(configId: String,
                             applicationName: String,
                             dependencies: [Dependency],
                             enableDebugMode: Bool = false) {
@@ -72,7 +72,7 @@ extension SuppyConfig {
     /// and updates the user defaults based on the init(dependencies:) parameter.
     ///
     /// - parameter completion: Called when fetching is complete irrespective of the result.
-    public func fetchConfiguration(completion: (() -> Void)? = nil) {
+    @objc public func fetchConfiguration(completion: (() -> Void)? = nil) {
         logger?.debug("Executing")
         fetcher.execute(context: context) { result in
             switch result {
