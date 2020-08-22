@@ -8,7 +8,7 @@ import Foundation
 
 internal class MockContextFactory {
 
-    class func mock(dependencies: [String: Any] = [:]) -> Context {
+    class func mock(dependencies: [Dependency] = []) -> Context {
         return Context(configId: "", applicationName: "", dependencies: dependencies, enableDebugMode: true)
     }
 }

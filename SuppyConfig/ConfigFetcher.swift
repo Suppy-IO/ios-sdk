@@ -81,8 +81,7 @@ internal struct ConfigFetcher: DataFetchExecutor {
         }
 
         if let data = data,
-           !data.isEmpty
-        {
+           !data.isEmpty {
             return .success(.newData(data))
         } else {
             return .success(.noData(httpResponse.statusCode))
@@ -107,10 +106,10 @@ internal struct ConfigFetcher: DataFetchExecutor {
 
         /// dependencies mapping to URL parameters
 
-        let dependencyNames = context.dependencies.map { $0.key }.joined(separator: ",")
+        let dependencyNames = context.dependencies.map { $0.name }.joined(separator: ",")
         let dependencyName = URLQueryItem(name: "dependencyName", value: dependencyNames)
 
-        let dependencyTypes = context.dependencies.map { String(describing: type(of: $0.value)) }.joined(separator: ",")
+        let dependencyTypes = context.dependencies.map { $0.mappedType.description }.joined(separator: ",")
         let dependencyType = URLQueryItem(name: "dependencyType", value: dependencyTypes)
 
         components.queryItems = [

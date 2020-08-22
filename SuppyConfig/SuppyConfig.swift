@@ -26,7 +26,12 @@ import Foundation
         /// Adds the registrationDictionary to the last item in every search list. This means that
         /// after NSUserDefaults has looked for a value in every other valid location,
         /// it will look in registered defaults.
-        UserDefaults.standard.register(defaults: context.dependencies)
+
+        let defaultsRegister = context.dependencies.reduce(into: [:]) { (result, dependency) in
+            result[dependency.name] = dependency.value
+        }
+
+        UserDefaults.standard.register(defaults: defaultsRegister)
         super.init()
         self.logger?.debug("anonymous ID: \(anonymousId)")
     }
@@ -52,7 +57,7 @@ extension SuppyConfig {
     ///     - dependencies: Configurations required by the application.
     public convenience init(configId: String,
                             applicationName: String,
-                            dependencies: [String: Any],
+                            dependencies: [Dependency],
                             enableDebugMode: Bool = false) {
 
         let context = Context(configId: configId,
@@ -96,23 +101,23 @@ extension SuppyConfig {
 
             let defaults = UserDefaults.standard
 
-            self.context.dependencies.forEach { key, value in
-                guard let attribute = (config.attributes?.first { $0.name == key }) else {
-                    logger?.debug("Dependency of name: \"\(key)\" was not returned from the server.")
+            self.context.dependencies.forEach { dependency in
+                guard let attribute = (config.attributes?.first { $0.name == dependency.name }) else {
+                    logger?.debug("Dependency of name: \"\(dependency.name)\" was not returned from the server.")
                     return
                 }
 
                 guard let attributeValue = attribute.value else {
                     defaults.set(nil, forKey: attribute.name)
-                    logger?.debug("Dependency of name: \"\(key)\" got assigned: nil")
+                    logger?.debug("Dependency of name: \"\(dependency.name)\" got assigned: nil")
                     return
                 }
 
-                let dependencyValueType = type(of: value)
+                let dependencyValueType = type(of: dependency.value)
 
                 FetchResultHandler(defaults: defaults, logger: logger)
                     .handle(type: dependencyValueType,
-                            key: key,
+                            key: dependency.name,
                             value: attributeValue)
 
             }

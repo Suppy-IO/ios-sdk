@@ -25,7 +25,7 @@ class DataTests: XCTestCase {
         let configFetcher = MockDataFetcher()
         configFetcher.attributes = [Attribute(name: "attribute", value: remote)]
 
-        let dependencies = ["attribute": local]
+        let dependencies = [Dependency(name: "attribute", value: local, type: .string)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
         let suppy = SuppyConfig(context: context, fetcher: fetcher)
@@ -44,7 +44,7 @@ class DataTests: XCTestCase {
         let configFetcher = MockDataFetcher()
         configFetcher.attributes = [Attribute(name: "attribute", value: remote)]
 
-        let dependencies = ["attribute": URL(string: local)!]
+        let dependencies = [Dependency(name: "attribute", value: URL(string: local)!, type: .url)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
         let suppy = SuppyConfig(context: context, fetcher: fetcher)
@@ -65,7 +65,7 @@ class DataTests: XCTestCase {
         let configFetcher = MockDataFetcher()
         configFetcher.attributes = [Attribute(name: "attribute", value: String(remote.timeIntervalSince1970))]
 
-        let dependencies = ["attribute": local.timeIntervalSince1970]
+        let dependencies = [Dependency(name: "attribute", value: local.timeIntervalSince1970, type: .number)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
         let suppy = SuppyConfig(context: context, fetcher: fetcher)
@@ -84,7 +84,7 @@ class DataTests: XCTestCase {
         let configFetcher = MockDataFetcher()
         configFetcher.attributes = [Attribute(name: "attribute", value: String(remote))]
 
-        let dependencies = ["attribute": local]
+        let dependencies = [Dependency(name: "attribute", value: local, type: .boolean)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
         let suppy = SuppyConfig(context: context, fetcher: fetcher)
@@ -103,7 +103,7 @@ class DataTests: XCTestCase {
         let configFetcher = MockDataFetcher()
         configFetcher.attributes = [Attribute(name: "attribute", value: String(remote))]
 
-        let dependencies = ["attribute": local]
+        let dependencies = [Dependency(name: "attribute", value: local, type: .boolean)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
         let suppy = SuppyConfig(context: context, fetcher: fetcher)
@@ -125,7 +125,7 @@ class DataTests: XCTestCase {
         let configFetcher = MockDataFetcher()
         configFetcher.attributes = [Attribute(name: "attribute", value: remote)]
 
-        let dependencies = ["attribute": localDictionary]
+        let dependencies = [Dependency(name: "attribute", value: localDictionary, type: .dictionary)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
         let suppy = SuppyConfig(context: context, fetcher: fetcher)
@@ -154,7 +154,7 @@ class DataTests: XCTestCase {
         let configFetcher = MockDataFetcher()
         configFetcher.attributes = [Attribute(name: "attribute", value: String(remote))]
 
-        let dependencies = ["attribute": local]
+        let dependencies = [Dependency(name: "attribute", value: local, type: .number)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
         let suppy = SuppyConfig(context: context, fetcher: fetcher)
@@ -173,7 +173,7 @@ class DataTests: XCTestCase {
         let configFetcher = MockDataFetcher()
         configFetcher.attributes = [Attribute(name: "attribute", value: String(remote))]
 
-        let dependencies = ["attribute": local]
+        let dependencies = [Dependency(name: "attribute", value: local, type: .number)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
         let suppy = SuppyConfig(context: context, fetcher: fetcher)
@@ -192,7 +192,7 @@ class DataTests: XCTestCase {
         let configFetcher = MockDataFetcher()
         configFetcher.attributes = [Attribute(name: "attribute", value: String(remote))]
 
-        let dependencies = ["attribute": local]
+        let dependencies = [Dependency(name: "attribute", value: local, type: .number)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
         let suppy = SuppyConfig(context: context, fetcher: fetcher)
@@ -211,7 +211,7 @@ class DataTests: XCTestCase {
         let configFetcher = MockDataFetcher()
         configFetcher.attributes = [Attribute(name: "attribute", value: remote)]
 
-        let dependencies = ["attribute": local]
+        let dependencies = [Dependency(name: "attribute", value: local, type: .array)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
         let suppy = SuppyConfig(context: context, fetcher: fetcher)
