@@ -31,7 +31,7 @@ import Foundation
     let value: Any
     let mappedType: DependencyType
 
-    @objc init(name: String, value: Any, type: DependencyType) {
+    @objc public init(name: String, value: Any, type: DependencyType) {
         self.name = name
         self.value = value
         self.mappedType = type
