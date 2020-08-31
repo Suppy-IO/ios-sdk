@@ -50,7 +50,7 @@ internal struct RetryExecutor {
                 guard attempts > 1 else {
                     return completion(result)
                 }
-                logger?.debug("retrying fetch...")
+                self.logger?.debug("retrying fetch...")
                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
                     self.retry(attempts - 1, delay: delay, task: task, completion: completion)
                 }

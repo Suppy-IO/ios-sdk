@@ -1,11 +1,12 @@
 //
 //  Copyright © 2020 Suppy.io. All rights reserved.
 //
+//  swiftlint:disable cyclomatic_complexity function_body_length
 
 import Foundation
 
 internal protocol ResultHandler: class {
-    func handle(type: Any.Type, key: String, value: String)
+    func handle(dependencyType: Any.Type, defaultsKey: String, newValue: Any)
     @discardableResult
     func setNext(handler: ResultHandler) -> ResultHandler
 }
@@ -17,20 +18,16 @@ internal class FetchResultHandler {
     init(defaults: UserDefaults, logger: Logger?) {
 
         let urlHandler = URLHandler(defaults: defaults, logger: logger)
-        let arrayHandler = ArrayHandler(defaults: defaults, logger: logger)
-        let dictionaryHandler = DictionaryHandler(defaults: defaults, logger: logger)
+        let dateHandler = DateHandler(defaults: defaults, logger: logger)
         let defaultHandler = DefaultHandler(defaults: defaults, logger: logger)
 
-        urlHandler
-            .setNext(handler: dictionaryHandler)
-            .setNext(handler: arrayHandler)
-            .setNext(handler: defaultHandler)
+        urlHandler.setNext(handler: dateHandler).setNext(handler: defaultHandler)
 
         chain = urlHandler
     }
 
-    func handle(type: Any.Type, key: String, value: String) {
-        chain.handle(type: type, key: key, value: value)
+    func handle(dependencyType: Any.Type, defaultsKey: String, newValue: Any) {
+        chain.handle(dependencyType: dependencyType, defaultsKey: defaultsKey, newValue: newValue)
     }
 }
 
@@ -47,7 +44,7 @@ internal class BaseResultHandler: ResultHandler {
         self.logger = logger
     }
 
-    func handle(type: Any.Type, key: String, value: String) {
+    func handle(dependencyType: Any.Type, defaultsKey: String, newValue: Any) {
         fatalError("not implemented")
     }
 
@@ -56,91 +53,134 @@ internal class BaseResultHandler: ResultHandler {
         return handler
     }
 
-    func save(_ value: Any?, forKey key: String) {
+    func save(_ value: Any, forKey key: String) -> Bool {
+        // prevents setting equal values
+        guard isDifferent(value: value, key: key) else {
+            return false // not modified
+        }
+
         // making sure the appropriate UserDefaults
         // overload is used, otherwise it fails.
-        if let url = value as? URL {
+        if value as? NSNull != nil {
+            defaults.set(nil, forKey: key)
+        } else if let url = value as? URL {
             defaults.set(url, forKey: key)
         } else {
             defaults.set(value, forKey: key)
         }
+
+        return true // modified
     }
 
     func log(key: String,
-             value: String,
+             value: Any,
              type: Any.Type,
              result: String,
+             hasChanged: Bool,
              file: String = #file,
              function: String = #function) {
-        logger?.debug(
-            "handled key: \"\(key)\", type \"\(type)\", " +
-                "raw value: \"\(value)\", final value: \"\(result)\"", file: file, function: function)
-    }
-}
 
-private final class DictionaryHandler: BaseResultHandler {
-    override func handle(type: Any.Type, key: String, value: String) {
-        guard type is Dictionary<String, String>.Type else {
-            nextHandler?.handle(type: type, key: key, value: value)
-            return
-        }
-
-        let dictionary: [String: String]?
-        if let data = value.data(using: .utf8) {
-            dictionary = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: String]
+        if hasChanged {
+            logger?.debug(
+                "handled key: \"\(key)\", type \"\(type)\", " +
+                    "raw value: \"\(value)\", final value: \"\(result)\"", file: file, function: function)
         } else {
-            dictionary = nil
+            logger?.debug(
+            "handled key: \"\(key)\", type \"\(type)\" - " +
+                " no changes due to new value being equal to old value: \(value)", file: file, function: function)
         }
+    }
 
-        save(dictionary, forKey: key)
-
-        log(key: key,
-            value: value,
-            type: type,
-            result: String(describing: dictionary))
+    func isDifferent(value: Any, key: String) -> Bool {
+        switch value.self {
+        case is NSString:
+            guard let newValue = value as? String else {
+                return true
+            }
+            let oldValue = defaults.string(forKey: key)
+            return newValue != oldValue
+        case is NSNumber:
+            guard let newValue = value as? NSNumber else {
+                return true
+            }
+            let oldValue = NSNumber(value: defaults.double(forKey: key))
+            return newValue != oldValue
+        case is NSDate:
+            guard let newValue = value as? Date,
+                  let oldValue = defaults.object(forKey: key) as? Date
+            else {
+                return true
+            }
+            return newValue.compare(oldValue) != ComparisonResult.orderedSame
+        case is NSArray:
+            guard let newValue = value as? NSArray else {
+                return true
+            }
+            let oldValue = NSArray(array: defaults.array(forKey: key) ?? [])
+            return newValue != oldValue
+        case is NSDictionary:
+            guard let newValue = value as? NSDictionary else {
+                return true
+            }
+            let oldValue = NSDictionary(dictionary: defaults.dictionary(forKey: key) ?? [:])
+            return newValue != oldValue
+        case is NSURL:
+            guard let newValue = value as? NSURL,
+                  let oldValue = defaults.url(forKey: key)
+            else {
+                return true
+            }
+            return newValue.absoluteString != oldValue.absoluteString
+        case is Bool:
+            guard let newValue = value as? Bool else {
+                return true
+            }
+            let oldValue = defaults.bool(forKey: key)
+            return newValue != oldValue
+        case is NSNull:
+            return defaults.value(forKey: key) != nil
+        default: return true
+        }
     }
 }
 
-private final class ArrayHandler: BaseResultHandler {
-    override func handle(type: Any.Type, key: String, value: String) {
-        guard type is Array<String>.Type else {
-            nextHandler?.handle(type: type, key: key, value: value)
-            return
-        }
-
-        let array: [String]?
-        if let data = value.data(using: .utf8) {
-            array = try? JSONSerialization.jsonObject(with: data, options: []) as? [String]
-        } else {
-            array = nil
-        }
-
-        save(array, forKey: key)
-
-        log(key: key,
-            value: value,
-            type: type,
-            result: String(describing: array))
-    }
-}
-
-/// URLHandler converts a String to URL and stores the result appropriately
-/// in the UserDefaults.
+/// URLHandler converts a String to URL and stores the result appropriately in the UserDefaults.
 private final class URLHandler: BaseResultHandler {
-    override func handle(type: Any.Type, key: String, value: String) {
-        guard type is URL.Type else {
-            nextHandler?.handle(type: type, key: key, value: value)
+    override func handle(dependencyType: Any.Type, defaultsKey: String, newValue: Any) {
+        guard dependencyType is URL.Type,
+              let urlString = newValue as? String else {
+            nextHandler?.handle(dependencyType: dependencyType, defaultsKey: defaultsKey, newValue: newValue)
             return
         }
         // using URL instead of String because default.url resolves to a file scheme otherwise
-        let url = URL(string: value)!
+        let url = URL(string: urlString)!
+        let hasChanged = save(url, forKey: defaultsKey)
 
-        save(url, forKey: key)
+        log(key: defaultsKey,
+            value: newValue,
+            type: dependencyType,
+            result: String(describing: url.absoluteString),
+            hasChanged: hasChanged)
+    }
+}
 
-        log(key: key,
-            value: value,
-            type: type,
-            result: String(describing: url.absoluteString))
+/// Converts a Double to Date and stores the result appropriately in the UserDefaults.
+private final class DateHandler: BaseResultHandler {
+    override func handle(dependencyType: Any.Type, defaultsKey: String, newValue: Any) {
+        guard dependencyType is Date.Type,
+              let urlString = newValue as? Double else {
+            nextHandler?.handle(dependencyType: dependencyType, defaultsKey: defaultsKey, newValue: newValue)
+            return
+        }
+        // using URL instead of String because default.url resolves to a file scheme otherwise
+        let date = Date(timeIntervalSince1970: urlString)
+        let hasChanged = save(date, forKey: defaultsKey)
+
+        log(key: defaultsKey,
+            value: newValue,
+            type: dependencyType,
+            result: String(describing: date),
+            hasChanged: hasChanged)
     }
 }
 
@@ -149,12 +189,13 @@ private final class URLHandler: BaseResultHandler {
 /// specifically handled. i.e. URL's are handled by URLHandler
 /// therefore they do not reach DefaultHandler.
 private final class DefaultHandler: BaseResultHandler {
-    override func handle(type: Any.Type, key: String, value: String) {
-        save(value, forKey: key)
+    override func handle(dependencyType: Any.Type, defaultsKey: String, newValue: Any) {
+        let hasChanged = save(newValue, forKey: defaultsKey)
 
-        log(key: key,
-            value: value,
-            type: type,
-            result: (String(describing: value)))
+        log(key: defaultsKey,
+            value: newValue,
+            type: dependencyType,
+            result: String(describing: newValue),
+            hasChanged: hasChanged)
     }
 }

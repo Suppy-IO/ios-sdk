@@ -8,11 +8,14 @@ import Foundation
 
     private let context: Context
     private let fetcher: RetryExecutor
+    private let defaults: UserDefaults
     private let logger: Logger?
 
     internal init(context: Context,
-                  fetcher: RetryExecutor? = nil) {
+                  fetcher: RetryExecutor? = nil,
+                  defaults: UserDefaults? = nil) {
         self.context = context
+        self.defaults = defaults ?? UserDefaults.standard
         self.logger = context.enableDebugMode ? Logger() : nil
 
         if let fetcher = fetcher {
@@ -27,11 +30,15 @@ import Foundation
         /// after NSUserDefaults has looked for a value in every other valid location,
         /// it will look in registered defaults.
 
-        let defaultsRegister = context.dependencies.reduce(into: [:]) { (result, dependency) in
+        let defaultsRegister: [String: Any] = context.dependencies.reduce(into: [:]) { (result, dependency) in
+            assert(dependency.mappedType.isAssignableFrom(value: dependency.value),
+                   "Dependency: \"\(dependency.name)\" of value: \"\(dependency.value)\" " +
+                   "is not assignable from the mapped type: \(dependency.mappedType.description)"
+            )
             result[dependency.name] = dependency.value
         }
 
-        UserDefaults.standard.register(defaults: defaultsRegister)
+        self.defaults.register(defaults: defaultsRegister)
         super.init()
         self.logger?.debug("anonymous ID: \(anonymousId)")
     }
@@ -56,16 +63,25 @@ extension SuppyConfig {
     ///     - applicationName: Application identifier seen in the web interface routing table.
     ///     - dependencies: Configurations required by the application.
     @objc public convenience init(configId: String,
-                            applicationName: String,
-                            dependencies: [Dependency],
-                            enableDebugMode: Bool = false) {
+                                  applicationName: String,
+                                  dependencies: [Dependency],
+                                  suiteName: String? = nil,
+                                  enableDebugMode: Bool = false) {
+
+        let defaults: UserDefaults?
+        if let suiteName = suiteName,
+           !suiteName.isEmpty {
+            defaults = UserDefaults(suiteName: suiteName)
+        } else {
+            defaults = nil
+        }
 
         let context = Context(configId: configId,
                               applicationName: applicationName,
                               dependencies: dependencies,
                               enableDebugMode: enableDebugMode)
 
-        self.init(context: context)
+        self.init(context: context, defaults: defaults)
     }
 
     /// Fetches the configuration correspondent to the init(configId:) parameter
@@ -90,35 +106,25 @@ extension SuppyConfig {
     private func handleSuccessFetch(_ fetchResult: FetchResult) {
         switch fetchResult {
         case let .newData(data):
-            guard let config = Config.fromData(data) else {
-                logger?.debug(
-                    """
-                       Some data was returned but we were unable to parse it.
-                       Data: \(String(data: data, encoding: .utf8) ?? "")
-                    """)
+            guard let config = Config(data: data, logger: logger),
+                  config.hasAttributes
+            else {
                 return
             }
 
-            let defaults = UserDefaults.standard
-
             self.context.dependencies.forEach { dependency in
-                guard let attribute = (config.attributes?.first { $0.name == dependency.name }) else {
-                    logger?.debug("Dependency of name: \"\(dependency.name)\" was not returned from the server.")
-                    return
-                }
 
-                guard let attributeValue = attribute.value else {
-                    defaults.set(nil, forKey: attribute.name)
-                    logger?.debug("Dependency of name: \"\(dependency.name)\" got assigned: nil")
+                guard let attribute = (config.attributes.first { $0.name == dependency.name }) else {
+                    logger?.debug("Dependency of name: \"\(dependency.name)\" was not returned from the server.")
                     return
                 }
 
                 let dependencyValueType = type(of: dependency.value)
 
                 FetchResultHandler(defaults: defaults, logger: logger)
-                    .handle(type: dependencyValueType,
-                            key: dependency.name,
-                            value: attributeValue)
+                    .handle(dependencyType: dependencyValueType,
+                            defaultsKey: dependency.name,
+                            newValue: attribute.value)
 
             }
         case let .noData(httpStatusCode):

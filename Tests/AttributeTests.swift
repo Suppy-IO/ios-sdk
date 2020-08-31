@@ -6,6 +6,8 @@ import XCTest
 
 @testable import SuppyConfig
 
+/// Tests meant to ensure that the different supported
+/// data types are properly received and mapped in UserDefaults.
 class AttributeTests: XCTestCase {
 
     let userDefaultsSuiteName = "TestDefaults"
@@ -28,29 +30,9 @@ class AttributeTests: XCTestCase {
         super.tearDown()
     }
 
-    func testNullValueAttribute() throws {
-        let local = "local value"
-        let remote: String? = nil
-
-        let configFetcher = MockDataFetcher()
-        configFetcher.addAttribute(name: "attribute", value: remote as Any)
-
-        let dependencies = [Dependency(name: "attribute", value: local, mappedType: .string)]
-        let context = MockContextFactory.mock(dependencies: dependencies)
-        let fetcher = RetryExecutor(with: configFetcher)
-        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
-
-        // verifying that dependency value has been set as local value
-        XCTAssertEqual(defaults.string(forKey: "attribute"), local)
-        suppy.fetchConfiguration()
-        // verifying that remote value has replaced local value
-        XCTAssertEqual(defaults.string(forKey: "attribute"), local)
-        XCTAssertEqual(observer?.numberOfCalls, 1)
-    }
-
     func testStringAttribute() throws {
-        let local = "local value"
-        let remote = "remote value"
+        let local = "a local value"
+        let remote = "a remote value"
 
         let configFetcher = MockDataFetcher()
         configFetcher.addAttribute(name: "attribute", value: remote)
@@ -65,7 +47,7 @@ class AttributeTests: XCTestCase {
         suppy.fetchConfiguration()
         // verifying that remote value has replaced local value
         XCTAssertEqual(defaults.string(forKey: "attribute"), remote)
-        XCTAssertEqual(observer?.numberOfCalls, 1)
+        XCTAssertEqual(observer?.numberOfCalls, 2)
     }
 
     func testURLAttribute() throws {
@@ -304,6 +286,26 @@ class AttributeTests: XCTestCase {
         // verifying that remote value has replaced local value
         XCTAssertEqual(defaults.double(forKey: "attribute"), remote.timeIntervalSince1970)
         XCTAssertEqual(observer?.numberOfCalls, 2)
+    }
+
+    func testNullValueAttribute() throws {
+        let local = "local value"
+        let remote: String? = nil
+
+        let configFetcher = MockDataFetcher()
+        configFetcher.addAttribute(name: "attribute", value: remote as Any)
+
+        let dependencies = [Dependency(name: "attribute", value: local, mappedType: .string)]
+        let context = MockContextFactory.mock(dependencies: dependencies)
+        let fetcher = RetryExecutor(with: configFetcher)
+        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
+
+        // verifying that dependency value has been set as local value
+        XCTAssertEqual(defaults.string(forKey: "attribute"), local)
+        suppy.fetchConfiguration()
+        // verifying that remote value has replaced local value
+        XCTAssertEqual(defaults.string(forKey: "attribute"), local)
+        XCTAssertEqual(observer?.numberOfCalls, 1)
     }
 
 }

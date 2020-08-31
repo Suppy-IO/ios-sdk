@@ -8,18 +8,22 @@ import Foundation
 
 internal class MockDataFetcher: DataFetchExecutor {
 
-    var attributes: [Attribute]?
-    var dependencies: [String: Any]?
+    var attributes: [[String: Any]] = []
     var numberOfCalls = 0
     var numberOfFailures = 0
 
     func execute(context: Context, completion: @escaping (Result<FetchResult, Error>) -> Void) {
         numberOfCalls += 1
-        if numberOfCalls <  numberOfFailures {
+        if numberOfCalls < numberOfFailures {
             completion(.failure(FetchError.invalidStatus(418)))
         } else {
-            let data = Config.toData(Config(attributes: attributes))
+            let config = ["attributes": attributes]
+            let data = try? JSONSerialization.data(withJSONObject: config, options: [])
             completion(.success(FetchResult.newData(data!)))
         }
+    }
+
+    func addAttribute(name: String, value: Any) {
+        attributes.append(["name": "attribute", "value": value])
     }
 }
