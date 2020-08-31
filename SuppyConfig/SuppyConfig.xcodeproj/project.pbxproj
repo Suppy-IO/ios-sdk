@@ -18,12 +18,12 @@
 		29CD7EE124EBA885000F0674 /* DataFetchExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD7EDF24EBA879000F0674 /* DataFetchExecutor.swift */; };
 		29CD7EE924EBDDD2000F0674 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29CD7EE824EBDDD2000F0674 /* Persistence.swift */; };
 		29D2F1E224F0EE6C0049722B /* Dependency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D2F1E124F0EE6C0049722B /* Dependency.swift */; };
-		29E0F8FC24F523C500CDFC96 /* MockObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E0F8FB24F523C500CDFC96 /* MockObserver.swift */; };
 		29E8E9E624E4EFCB0091D96C /* SuppyConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8E9E524E4EFCB0091D96C /* SuppyConfig.swift */; };
 		29E8EA1124E4F4360091D96C /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8EA0424E4F4350091D96C /* Model.swift */; };
 		29E8EA1424E4F4360091D96C /* ConfigFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8EA0724E4F4350091D96C /* ConfigFetcher.swift */; };
 		29E8EA1B24E4F4360091D96C /* Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E8EA0E24E4F4350091D96C /* Context.swift */; };
 		29E8EA2824E4F8B40091D96C /* libSuppyConfig.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 29E8E9E224E4EFCB0091D96C /* libSuppyConfig.a */; };
+		29F748AD24FD027F00A7BAC5 /* MockObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29E0F8FB24F523C500CDFC96 /* MockObserver.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -260,7 +260,6 @@
 				29CD3EEE24EEA202002F97EE /* FetchResultHandler.swift in Sources */,
 				29E8EA1124E4F4360091D96C /* Model.swift in Sources */,
 				29CD3EE824EE4C7A002F97EE /* Logger.swift in Sources */,
-				29E0F8FC24F523C500CDFC96 /* MockObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,6 +272,7 @@
 				29BE29C024ED3BA600B471C3 /* RetryTests.swift in Sources */,
 				29BE29BE24ED3BA600B471C3 /* MockDataFetcher.swift in Sources */,
 				299D0CC924ED7F9200C36FC2 /* AttributeTests.swift in Sources */,
+				29F748AD24FD027F00A7BAC5 /* MockObserver.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
