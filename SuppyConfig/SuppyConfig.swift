@@ -4,7 +4,7 @@
 
 import Foundation
 
-@objc public class SuppyConfig: NSObject {
+@objc public final class SuppyConfig: NSObject {
 
     private let context: Context
     private let fetcher: RetryExecutor
@@ -13,9 +13,9 @@ import Foundation
 
     internal init(context: Context,
                   fetcher: RetryExecutor? = nil,
-                  defaults: UserDefaults? = nil) {
+                  defaults: UserDefaults) {
         self.context = context
-        self.defaults = defaults ?? UserDefaults.standard
+        self.defaults = defaults
         self.logger = context.enableDebugMode ? Logger() : nil
 
         if let fetcher = fetcher {
@@ -42,6 +42,34 @@ import Foundation
         super.init()
         self.logger?.debug("anonymous ID: \(anonymousId)")
     }
+
+    /// Maps the configurations received from the server into the UserDefaults following the dependencies name and type.
+    private func handleSuccessFetch(_ fetchResult: FetchResult) {
+        switch fetchResult {
+        case let .newData(data):
+            guard let config = Config(data: data, logger: logger),
+                  config.hasAttributes
+            else {
+                return
+            }
+
+            self.context.dependencies.forEach { dependency in
+
+                guard let attribute = (config.attributes.first { $0.name == dependency.name }) else {
+                    logger?.debug("Dependency of name: \"\(dependency.name)\" was not returned from the server.")
+                    return
+                }
+
+                FetchResultHandler(defaults: defaults, logger: logger)
+                    .handle(mappedType: dependency.mappedType,
+                            defaultsKey: dependency.name,
+                            newValue: attribute.value)
+
+            }
+        case let .noData(httpStatusCode):
+            logger?.debug("no data received - HTTP status code: \(httpStatusCode)")
+        }
+    }
 }
 
 extension SuppyConfig {
@@ -62,18 +90,21 @@ extension SuppyConfig {
     ///     - configId: Configuration used.
     ///     - applicationName: Application identifier seen in the web interface routing table.
     ///     - dependencies: Configurations required by the application.
+    ///     - suiteName: Intializes a UserDefaults database using the specified name
+    ///     @see https://developer.apple.com/documentation/foundation/userdefaults/1409957-init
+    ///     - enableDebugMode: Outputs configuration fetching and processing information.
     @objc public convenience init(configId: String,
                                   applicationName: String,
                                   dependencies: [Dependency],
                                   suiteName: String? = nil,
                                   enableDebugMode: Bool = false) {
 
-        let defaults: UserDefaults?
+        let defaults: UserDefaults
         if let suiteName = suiteName,
-           !suiteName.isEmpty {
-            defaults = UserDefaults(suiteName: suiteName)
+           let defaultSuite = UserDefaults(suiteName: suiteName) {
+            defaults = defaultSuite
         } else {
-            defaults = nil
+            defaults = UserDefaults.standard
         }
 
         let context = Context(configId: configId,
@@ -99,36 +130,6 @@ extension SuppyConfig {
             }
             self.logger?.debug("Completed")
             completion?()
-        }
-    }
-
-    /// Maps the configurations received from the server into the UserDefaults following the dependencies name and type.
-    private func handleSuccessFetch(_ fetchResult: FetchResult) {
-        switch fetchResult {
-        case let .newData(data):
-            guard let config = Config(data: data, logger: logger),
-                  config.hasAttributes
-            else {
-                return
-            }
-
-            self.context.dependencies.forEach { dependency in
-
-                guard let attribute = (config.attributes.first { $0.name == dependency.name }) else {
-                    logger?.debug("Dependency of name: \"\(dependency.name)\" was not returned from the server.")
-                    return
-                }
-
-                let dependencyValueType = type(of: dependency.value)
-
-                FetchResultHandler(defaults: defaults, logger: logger)
-                    .handle(dependencyType: dependencyValueType,
-                            defaultsKey: dependency.name,
-                            newValue: attribute.value)
-
-            }
-        case let .noData(httpStatusCode):
-            logger?.debug("no data received - HTTP status code: \(httpStatusCode)")
         }
     }
 }

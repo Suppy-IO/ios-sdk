@@ -29,7 +29,7 @@ class EqualityTests: XCTestCase {
         defaults.set("value", forKey: "attribute")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isDifferent = handler.isDifferent(value: "value", key: "attribute")
+        let isDifferent = handler.isDifferent(value: "value", key: "attribute", mappedType: .string)
 
         XCTAssertFalse(isDifferent)
     }
@@ -38,7 +38,7 @@ class EqualityTests: XCTestCase {
         defaults.set("value", forKey: "attribute")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isDifferent = handler.isDifferent(value: "eulav", key: "attribute")
+        let isDifferent = handler.isDifferent(value: "eulav", key: "attribute", mappedType: .string)
 
         XCTAssertTrue(isDifferent)
     }
@@ -48,8 +48,8 @@ class EqualityTests: XCTestCase {
         defaults.set(1.1234, forKey: "floating point")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isIntegerDifferent = handler.isDifferent(value: 1, key: "integer")
-        let isFloatingPointDifferent = handler.isDifferent(value: 1.1234, key: "floating point")
+        let isIntegerDifferent = handler.isDifferent(value: 1, key: "integer", mappedType: .number)
+        let isFloatingPointDifferent = handler.isDifferent(value: 1.1234, key: "floating point", mappedType: .number)
 
         XCTAssertFalse(isIntegerDifferent)
         XCTAssertFalse(isFloatingPointDifferent)
@@ -60,8 +60,8 @@ class EqualityTests: XCTestCase {
         defaults.set(1.1234, forKey: "floating point")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isIntegerDifferent = handler.isDifferent(value: -1, key: "integer")
-        let isFloatingPointDifferent = handler.isDifferent(value: -1.1234, key: "floating point")
+        let isIntegerDifferent = handler.isDifferent(value: -1, key: "integer", mappedType: .number)
+        let isFloatingPointDifferent = handler.isDifferent(value: -1.1234, key: "floating point", mappedType: .number)
 
         XCTAssertTrue(isIntegerDifferent)
         XCTAssertTrue(isFloatingPointDifferent)
@@ -71,7 +71,7 @@ class EqualityTests: XCTestCase {
         defaults.set([1, 2, 3], forKey: "array")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isDifferent = handler.isDifferent(value: [1, 2, 3], key: "array")
+        let isDifferent = handler.isDifferent(value: [1, 2, 3], key: "array", mappedType: .array)
 
         XCTAssertFalse(isDifferent)
     }
@@ -80,7 +80,7 @@ class EqualityTests: XCTestCase {
         defaults.set([1, 2, 3], forKey: "array")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isDifferent = handler.isDifferent(value: [3, 2, 1], key: "array")
+        let isDifferent = handler.isDifferent(value: [3, 2, 1], key: "array", mappedType: .array)
 
         XCTAssertTrue(isDifferent)
     }
@@ -90,7 +90,7 @@ class EqualityTests: XCTestCase {
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
         // items in different order
-        let isDifferent = handler.isDifferent(value: ["y": "2", "x": "1"], key: "dictionary")
+        let isDifferent = handler.isDifferent(value: ["y": "2", "x": "1"], key: "dictionary", mappedType: .dictionary)
 
         XCTAssertFalse(isDifferent)
     }
@@ -99,7 +99,7 @@ class EqualityTests: XCTestCase {
         defaults.set(["x": "1", "y": "2"], forKey: "dictionary")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isDifferent = handler.isDifferent(value: ["x": "2", "y": "2"], key: "dictionary")
+        let isDifferent = handler.isDifferent(value: ["x": "2", "y": "2"], key: "dictionary", mappedType: .dictionary)
 
         XCTAssertTrue(isDifferent)
     }
@@ -114,7 +114,7 @@ class EqualityTests: XCTestCase {
         defaults.set(xDate, forKey: "date")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isDifferent = handler.isDifferent(value: yDate as Any, key: "date")
+        let isDifferent = handler.isDifferent(value: yDate as Any, key: "date", mappedType: .date)
 
         XCTAssertFalse(isDifferent)
     }
@@ -126,7 +126,7 @@ class EqualityTests: XCTestCase {
         defaults.set(xURL, forKey: "url")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isDifferent = handler.isDifferent(value: yURL as Any, key: "url")
+        let isDifferent = handler.isDifferent(value: yURL as Any, key: "url", mappedType: .url)
 
         XCTAssertFalse(isDifferent)
     }
@@ -138,7 +138,7 @@ class EqualityTests: XCTestCase {
         defaults.set(xURL, forKey: "url")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isDifferent = handler.isDifferent(value: yURL as Any, key: "url")
+        let isDifferent = handler.isDifferent(value: yURL as Any, key: "url", mappedType: .url)
 
         XCTAssertTrue(isDifferent)
     }
@@ -147,7 +147,7 @@ class EqualityTests: XCTestCase {
         defaults.set(nil, forKey: "nil")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isDifferent = handler.isDifferent(value: NSNull() as Any, key: "nil")
+        let isDifferent = handler.isDifferent(value: NSNull() as Any, key: "nil", mappedType: .string)
 
         XCTAssertFalse(isDifferent)
     }
@@ -158,7 +158,7 @@ class EqualityTests: XCTestCase {
         defaults.set(xURL, forKey: "nil")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isDifferent = handler.isDifferent(value: NSNull() as Any, key: "nil")
+        let isDifferent = handler.isDifferent(value: NSNull() as Any, key: "nil", mappedType: .url)
 
         XCTAssertTrue(isDifferent)
     }
@@ -167,7 +167,7 @@ class EqualityTests: XCTestCase {
         defaults.set(true, forKey: "bool")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isDifferent = handler.isDifferent(value: true as Any, key: "bool")
+        let isDifferent = handler.isDifferent(value: true as Any, key: "bool", mappedType: .boolean)
 
         XCTAssertFalse(isDifferent)
     }
@@ -176,7 +176,7 @@ class EqualityTests: XCTestCase {
         defaults.set(true, forKey: "bool")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isDifferent = handler.isDifferent(value: false as Any, key: "bool")
+        let isDifferent = handler.isDifferent(value: false as Any, key: "bool", mappedType: .boolean)
 
         XCTAssertTrue(isDifferent)
     }
@@ -185,7 +185,7 @@ class EqualityTests: XCTestCase {
         defaults.set(nil, forKey: "bool")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isDifferent = handler.isDifferent(value: false as Any, key: "bool")
+        let isDifferent = handler.isDifferent(value: false as Any, key: "bool", mappedType: .boolean)
 
         XCTAssertFalse(isDifferent)
     }
@@ -194,9 +194,8 @@ class EqualityTests: XCTestCase {
         defaults.set(nil, forKey: "bool")
 
         let handler = BaseResultHandler(defaults: defaults, logger: logger)
-        let isDifferent = handler.isDifferent(value: true as Any, key: "bool")
+        let isDifferent = handler.isDifferent(value: true as Any, key: "bool", mappedType: .boolean)
 
         XCTAssertTrue(isDifferent)
     }
-
 }
