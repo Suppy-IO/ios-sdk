@@ -1,0 +1,6 @@
+module SuppyConfig {
+  umbrella header "SuppyConfig-umbrella.h"
+
+  export *
+  module * { export * }
+}

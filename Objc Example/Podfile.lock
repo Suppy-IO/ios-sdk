@@ -1,0 +1,16 @@
+PODS:
+  - SuppyConfig (1.0.10)
+
+DEPENDENCIES:
+  - SuppyConfig (= 1.0.10)
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - SuppyConfig
+
+SPEC CHECKSUMS:
+  SuppyConfig: 079d6997ad85015c9a1b7875322cab922f48fa73
+
+PODFILE CHECKSUM: ea1b32d6c16f7c057a812e9b74cf810d4144dc3c
+
+COCOAPODS: 1.9.3
