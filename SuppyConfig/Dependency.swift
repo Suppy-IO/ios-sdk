@@ -44,9 +44,18 @@ import Foundation
     let name: String
     /// The initial value of the attribute
     let value: Any
+    /// Specifies the server side attribute type to be matched
+    /// how it will be stored in the UserDefaults once it is fetched.
+    /// i.e. mappedType boolean will try to match an attribute of name XYZ of type boolean
+    /// and when the server response includes attribute XYZ, then XYZ is stored as a boolean.
     let mappedType: DependencyType
 
     @objc public init(name: String, value: Any, mappedType: DependencyType) {
+        assert(mappedType.isAssignableFrom(value: value),
+               "Dependency: \"\(name)\" of value: \"\(value)\" " +
+               "is not assignable from the mapped type: \(mappedType.description)"
+        )
+
         self.name = name
         self.value = value
         self.mappedType = mappedType

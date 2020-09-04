@@ -19,7 +19,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '9.0'
 
 target 'TargetName' do
-  pod 'SuppyConfig', '1.0.10'
+  pod 'SuppyConfig', '1.0.11'
 end
 ```
 Then, run the following command:

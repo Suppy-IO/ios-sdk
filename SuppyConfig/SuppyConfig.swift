@@ -30,11 +30,7 @@ import Foundation
         /// after NSUserDefaults has looked for a value in every other valid location,
         /// it will look in registered defaults.
 
-        let defaultsRegister: [String: Any] = context.dependencies.reduce(into: [:]) { (result, dependency) in
-            assert(dependency.mappedType.isAssignableFrom(value: dependency.value),
-                   "Dependency: \"\(dependency.name)\" of value: \"\(dependency.value)\" " +
-                   "is not assignable from the mapped type: \(dependency.mappedType.description)"
-            )
+        let defaultsRegister = context.dependencies.reduce(into: [:]) { (result, dependency) in
             result[dependency.name] = dependency.value
         }
 
