@@ -36,11 +36,32 @@ Objective-C: `@import SuppyConfig;`
 
 ### Initialize 
 In order to be able to use SuppyConfig you need to initialize it first.
+
+Parameters:
+
+- configId: Configuration used.
+- applicationName: Application identifier seen in the web interface routing table.
+- dependencies: Configurations required by the application.
+- suiteName: Intializes a UserDefaults database using the specified name
+- enableDebugMode: Outputs configuration fetching and processing information.
+
 ```swift
 let suppyConfig = SuppyConfig(configId: "<identifier>", 
                               applicationName: "<name>", 
-                              dependencies: "<[String: Any]>")       
+                              dependencies: "[Dependency]")       
 ```
+In case you want to keep a separate UserDefaults database for your remote configurations you may want to specify the parameter suiteName in the init.
+
+https://developer.apple.com/documentation/foundation/userdefaults/1409957-init for more information on the topic.
+
+```swift
+let suppyConfig = SuppyConfig(configId: "<identifier>", 
+                              applicationName: "<name>", 
+                              dependencies: "[Dependency]",
+                              suiteName: "<UserDefaults suite name>",
+                              enableDebugMode: "<Boolean>"")       
+```
+
 After the initialization, you are ready to fetch your configuration.
 
 ### Dependencies
@@ -79,20 +100,19 @@ UserDefaults.standard.float(forKey:)
 ```
 
 ### Recommendation
+
+#### Debugging: 
+Debug mode (init parameter enableDebugMode) is recommended to be enabled during development only. It should be turned off in production.
+
+#### Fetching: 
 Configuration fetching is not bound to any specific part of your application life-cycle. 
 Nevertheless, we suggest that fetchConfiguration is called during AppDelegate's: applicationDidBecomeActive.
-
-```swift
-application(_:didFinishLaunchingWithOptions:)     
-```
-Fetching during didFinishLaunchingWithOptions will ensure that your configurations are refreshed once 
-per cold start.
 
 ```swift
 applicationDidBecomeActive(_:)
 ```
 Fetching during applicationDidBecomeActive will ensure that your configurations are refreshed every time
-the application comes back from background.
+the application comes back from background and when it is initialized.
 
 ## Example
 **This library is not a singleton. You need to hold a reference to it.**
