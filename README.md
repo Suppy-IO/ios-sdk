@@ -3,6 +3,7 @@
 ## How to get started
 - Create an account at **suppy.io**
 - Create a configuration with at least one attribute and release it at **suppy.io**
+- Check one of our examples: Swift Example or Objc Example projects.
 - Continue reading this page.
 
 ## Installation:
@@ -15,10 +16,10 @@ $ gem install cocoapods
 To integrate SuppyConfig into your Xcode project using CocoaPods, specify it in your Podfile:
 ```
 source 'https://github.com/CocoaPods/Specs.git'
-platform :ios, '10.0'
+platform :ios, '9.0'
 
 target 'TargetName' do
-  pod 'SuppyConfig', '1.0.0'
+  pod 'SuppyConfig', '1.0.10'
 end
 ```
 Then, run the following command:
@@ -29,11 +30,11 @@ $ pod install
 ## Usage
 This library supports iOS 10.0 and iPadOS 14.0 and above.
 
-#### Imports
+### Imports
 Swift: `import SuppyConfig`  
 Objective-C: `@import SuppyConfig;`
 
-#### Initialize 
+### Initialize 
 In order to be able to use SuppyConfig you need to initialize it first.
 ```swift
 let suppyConfig = SuppyConfig(configId: "<identifier>", 
@@ -42,14 +43,29 @@ let suppyConfig = SuppyConfig(configId: "<identifier>",
 ```
 After the initialization, you are ready to fetch your configuration.
 
-#### Fetch configuration
+### Dependencies
+Dependencies are stored in the UserDefaults registration dictionary. It is used as the last item in every search list. This means that after UserDefaults
+has looked for a value in every other valid location, it will look in the registered defaults.
+
+**IMPORTANT** The server's response is based on the application dependencies. If you pass an empty array, nothing is retrieved. If your dependencies do not match your server configurations, nothing is retrieved. 
+
+```swift
+Dependency(name: "<Name of the dependency>", 
+           value: <A initial value / fallback>, // type = Any
+           mappedType: <Dependency Type>)
+```
+*Available types:* **string, number, boolean, array, dictionary, url, date**
+
+### Fetch configuration
 ```swift
 suppyConfig.fetchConfiguration(completion:)       
 ```
 The completion is optional and allows you to get informed when fetching is complete.
 
-#### Use configurations
-Configurations are stored in the standard UserDefaults therefore they are accessible through it.
+### Use configurations
+Configurations are stored in the standard UserDefaults therefore they are accessible through an API you already know.
+
+*Configuration values are stored according to the dependency types specified in the initialization.*
 
 ```swift
 UserDefaults.standard.string(forKey:)
@@ -62,9 +78,9 @@ UserDefaults.standard.double(forKey:)
 UserDefaults.standard.float(forKey:)
 ```
 
-#### Recommendation
+### Recommendation
 Configuration fetching is not bound to any specific part of your application life-cycle. 
-Nevertheless, we suggest that fetchConfiguration is called during AppDelegate's: didFinishLaunchingWithOptions and applicationDidBecomeActive.
+Nevertheless, we suggest that fetchConfiguration is called during AppDelegate's: applicationDidBecomeActive.
 
 ```swift
 application(_:didFinishLaunchingWithOptions:)     
@@ -82,21 +98,31 @@ the application comes back from background.
 **This library is not a singleton. You need to hold a reference to it.**
 
 ```swift
-let dependencies: [String: Any] = ["String Configuration": "a string",
-                                   "URL Configuration": URL(string: "https://url.com")!,
-                                   "INT Configuration": 1,
-                                   "BOOL Configuration": true]
+let dependencies = [
+            
+            Dependency(name: "Application Title", value: "Intial App Title", mappedType: .string),
 
-let suppyConfig = SuppyConfig(configId: "1234", 
-                              applicationName: "IOS Client", 
-                              dependencies: dependencies
+            Dependency(name: "Privacy Policy", value: URL(string: "https://default-local-url.com")!, mappedType: .url),
+            
+            Dependency(name: "Number of Seats", value: 2, mappedType: .number),
+            
+            Dependency(name: "Product List", value: [], mappedType: .array),
+            
+            Dependency(name: "Feature X Enabled", value: false, mappedType: .boolean)
+        ]
+
+let suppyConfig = SuppyConfig(configId: "5f43879d25bc1e682f988129",        
+                              applicationName: "Swift Example", 
+                              dependencies: dependencies, 
+                              suiteName: nil, 
+                              enableDebugMode: true) 
                               
 suppyConfig.fetchConfiguration {
-    let defaults = UserDefaults.standard
-    
-    let string = defaults.string(forKey: "String Configuration")
-    let url = defaults.url(forKey: "URL Configuration")
-    let int = defaults.integer(forKey: "INT Configuration")
-    let bool = defaults.integer(forKey: "BOOL Configuration")
+    let defaults = UserDefaults.standard    
+    let string = defaults.string(forKey: "Application Title")
+    let url = defaults.url(forKey: "Privacy Policy")
+    let int = defaults.integer(forKey: "Number of Seats")
+    let bool = defaults.bool(forKey: "Feature X Enabled")
+    let array = defaults.array(forKey: "Product List")
 }
 ```
