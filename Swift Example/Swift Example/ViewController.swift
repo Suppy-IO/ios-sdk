@@ -42,6 +42,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        loadFromUserDefaults()
+
         self.view.addSubview(tableView)
 
         tableView.translatesAutoresizingMaskIntoConstraints = false
