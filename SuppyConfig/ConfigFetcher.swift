@@ -102,7 +102,7 @@ internal struct ConfigFetcher: DataFetchExecutor {
         let deviceModel = URLQueryItem(name: "deviceModel", value: self.deviceModel)
         let appIdentifier = URLQueryItem(name: "bundleIdentifier", value: self.bundleIdentifier)
         let appVersion = URLQueryItem(name: "bundleVersion", value: self.bundleVersion)
-        let appBuild = URLQueryItem(name: "bundleBuild", value: self.bundleBuild)
+        let osVersion = URLQueryItem(name: "osVersion", value: self.osVersion)
 
         /// dependencies mapping to URL parameters
 
@@ -117,7 +117,7 @@ internal struct ConfigFetcher: DataFetchExecutor {
             deviceModel,
             appIdentifier,
             appVersion,
-            appBuild,
+            osVersion,
             anonymousId,
             dependencyName,
             dependencyType
@@ -149,11 +149,16 @@ private extension ConfigFetcher {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     }
 
-    var bundleBuild: String {
-        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
+    var applicationName: String {
+        bundleIdentifier + "-" + bundleVersion
     }
 
-    var applicationName: String {
-        bundleIdentifier + bundleVersion + bundleBuild
+    var osVersion: String {
+        let osVersion = ProcessInfo().operatingSystemVersion
+        let versionString =
+            osVersion.majorVersion.description + "." +
+            osVersion.minorVersion.description + "." +
+            osVersion.patchVersion.description
+        return versionString
     }
 }
