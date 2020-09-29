@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2964F94D24F63827007FCA5C /* EqualityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2964F94B24F63815007FCA5C /* EqualityTests.swift */; };
 		299D0CC924ED7F9200C36FC2 /* AttributeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29BD24ED3BA600B471C3 /* AttributeTests.swift */; };
+		29A7D9D525234965006DA1E7 /* VariantsFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A7D9D425234965006DA1E7 /* VariantsFetcher.swift */; };
 		29BE29BE24ED3BA600B471C3 /* MockDataFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29B924ED3BA600B471C3 /* MockDataFetcher.swift */; };
 		29BE29BF24ED3BA600B471C3 /* MockContextFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29BA24ED3BA600B471C3 /* MockContextFactory.swift */; };
 		29BE29C024ED3BA600B471C3 /* RetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29BE29BB24ED3BA600B471C3 /* RetryTests.swift */; };
@@ -50,6 +51,7 @@
 
 /* Begin PBXFileReference section */
 		2964F94B24F63815007FCA5C /* EqualityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualityTests.swift; sourceTree = "<group>"; };
+		29A7D9D425234965006DA1E7 /* VariantsFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VariantsFetcher.swift; sourceTree = "<group>"; };
 		29BE29B924ED3BA600B471C3 /* MockDataFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDataFetcher.swift; sourceTree = "<group>"; };
 		29BE29BA24ED3BA600B471C3 /* MockContextFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockContextFactory.swift; sourceTree = "<group>"; };
 		29BE29BB24ED3BA600B471C3 /* RetryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetryTests.swift; sourceTree = "<group>"; };
@@ -115,6 +117,7 @@
 		29E8E9D924E4EFCB0091D96C = {
 			isa = PBXGroup;
 			children = (
+				29A7D9D425234965006DA1E7 /* VariantsFetcher.swift */,
 				29D2F1E124F0EE6C0049722B /* Dependency.swift */,
 				29CD3EED24EEA202002F97EE /* FetchResultHandler.swift */,
 				29CD3EE724EE4C7A002F97EE /* Logger.swift */,
@@ -260,6 +263,7 @@
 				29CD3EEE24EEA202002F97EE /* FetchResultHandler.swift in Sources */,
 				29E8EA1124E4F4360091D96C /* Model.swift in Sources */,
 				29CD3EE824EE4C7A002F97EE /* Logger.swift in Sources */,
+				29A7D9D525234965006DA1E7 /* VariantsFetcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

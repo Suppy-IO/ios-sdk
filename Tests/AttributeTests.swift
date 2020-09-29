@@ -40,7 +40,7 @@ class AttributeTests: XCTestCase {
         let dependencies = [Dependency(name: "attribute", value: local, mappedType: .string)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
-        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
+        let suppy = SuppyConfig(context: context, configFetcher: fetcher, defaults: defaults)
 
         // verifying that dependency value has been set as local value
         XCTAssertEqual(defaults.string(forKey: "attribute"), local)
@@ -60,7 +60,7 @@ class AttributeTests: XCTestCase {
         let dependencies = [Dependency(name: "attribute", value: URL(string: local)!, mappedType: .url)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
-        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
+        let suppy = SuppyConfig(context: context, configFetcher: fetcher, defaults: defaults)
 
         // verifying that dependency value has been set as local value
         XCTAssertEqual(defaults.url(forKey: "attribute"), URL(string: local)!)
@@ -80,7 +80,7 @@ class AttributeTests: XCTestCase {
         let dependencies = [Dependency(name: "attribute", value: local, mappedType: .boolean)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
-        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
+        let suppy = SuppyConfig(context: context, configFetcher: fetcher, defaults: defaults)
 
         // verifying that dependency value has been set as local value
         XCTAssertEqual(defaults.bool(forKey: "attribute"), local)
@@ -100,7 +100,7 @@ class AttributeTests: XCTestCase {
         let dependencies = [Dependency(name: "attribute", value: local, mappedType: .boolean)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
-        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
+        let suppy = SuppyConfig(context: context, configFetcher: fetcher, defaults: defaults)
 
         // verifying that dependency value has been set as local value
         XCTAssertEqual(defaults.bool(forKey: "attribute"), local)
@@ -121,7 +121,7 @@ class AttributeTests: XCTestCase {
         let dependencies = [Dependency(name: "attribute", value: localDictionary, mappedType: .dictionary)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
-        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
+        let suppy = SuppyConfig(context: context, configFetcher: fetcher, defaults: defaults)
 
         // verifying that dependency value has been set as local value
 
@@ -151,7 +151,7 @@ class AttributeTests: XCTestCase {
         let dependencies = [Dependency(name: "attribute", value: local, mappedType: .number)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
-        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
+        let suppy = SuppyConfig(context: context, configFetcher: fetcher, defaults: defaults)
 
         // verifying that dependency value has been set as local value
         XCTAssertEqual(defaults.integer(forKey: "attribute"), local)
@@ -171,7 +171,7 @@ class AttributeTests: XCTestCase {
         let dependencies = [Dependency(name: "attribute", value: local, mappedType: .number)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
-        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
+        let suppy = SuppyConfig(context: context, configFetcher: fetcher, defaults: defaults)
 
         // verifying that dependency value has been set as local value
         XCTAssertEqual(defaults.double(forKey: "attribute"), local)
@@ -191,7 +191,7 @@ class AttributeTests: XCTestCase {
         let dependencies = [Dependency(name: "attribute", value: local, mappedType: .number)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
-        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
+        let suppy = SuppyConfig(context: context, configFetcher: fetcher, defaults: defaults)
 
         // verifying that dependency value has been set as local value
         XCTAssertEqual(defaults.float(forKey: "attribute"), local)
@@ -211,7 +211,7 @@ class AttributeTests: XCTestCase {
         let dependencies = [Dependency(name: "attribute", value: local, mappedType: .array)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
-        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
+        let suppy = SuppyConfig(context: context, configFetcher: fetcher, defaults: defaults)
 
         // verifying that dependency value has been set as local value
         XCTAssertEqual(defaults.array(forKey: "attribute") as? [String], local)
@@ -231,7 +231,7 @@ class AttributeTests: XCTestCase {
         let dependencies = [Dependency(name: "attribute", value: local, mappedType: .array)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
-        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
+        let suppy = SuppyConfig(context: context, configFetcher: fetcher, defaults: defaults)
 
         // verifying that dependency value has been set as local value
         XCTAssertEqual(defaults.array(forKey: "attribute") as? [String], local)
@@ -255,7 +255,7 @@ class AttributeTests: XCTestCase {
         let dependencies = [Dependency(name: "attribute", value: local as Any, mappedType: .date)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
-        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
+        let suppy = SuppyConfig(context: context, configFetcher: fetcher, defaults: defaults)
 
         // verifying that dependency value has been set as local value
         XCTAssertEqual(defaults.object(forKey: "attribute") as? Date, local)
@@ -278,7 +278,7 @@ class AttributeTests: XCTestCase {
         let dependencies = [Dependency(name: "attribute", value: local.timeIntervalSince1970, mappedType: .number)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
-        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
+        let suppy = SuppyConfig(context: context, configFetcher: fetcher, defaults: defaults)
 
         // verifying that dependency value has been set as local value
         XCTAssertEqual(defaults.double(forKey: "attribute"), local.timeIntervalSince1970)
@@ -298,7 +298,7 @@ class AttributeTests: XCTestCase {
         let dependencies = [Dependency(name: "attribute", value: local, mappedType: .string)]
         let context = MockContextFactory.mock(dependencies: dependencies)
         let fetcher = RetryExecutor(with: configFetcher)
-        let suppy = SuppyConfig(context: context, fetcher: fetcher, defaults: defaults)
+        let suppy = SuppyConfig(context: context, configFetcher: fetcher, defaults: defaults)
 
         // verifying that dependency value has been set as local value
         XCTAssertEqual(defaults.string(forKey: "attribute"), local)

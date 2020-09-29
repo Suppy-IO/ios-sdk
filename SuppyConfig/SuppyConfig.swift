@@ -7,21 +7,29 @@ import Foundation
 @objc public final class SuppyConfig: NSObject {
 
     private let context: Context
-    private let fetcher: RetryExecutor
+    private let configFetcher: RetryExecutor
+    private let variantsFetcher: RetryExecutor
     private let defaults: UserDefaults
     private let logger: Logger?
 
     internal init(context: Context,
-                  fetcher: RetryExecutor? = nil,
+                  configFetcher: RetryExecutor? = nil,
+                  variantsFetcher: RetryExecutor? = nil,
                   defaults: UserDefaults) {
         self.context = context
         self.defaults = defaults
         self.logger = context.enableDebugMode ? Logger() : nil
 
-        if let fetcher = fetcher {
-            self.fetcher = fetcher
+        if let fetcher = configFetcher {
+            self.configFetcher = fetcher
         } else {
-            self.fetcher = RetryExecutor(with: ConfigFetcher(), logger: self.logger)
+            self.configFetcher = RetryExecutor(with: ConfigFetcher(), logger: self.logger)
+        }
+
+        if let variantsFetcher = variantsFetcher {
+            self.variantsFetcher = variantsFetcher
+        } else {
+            self.variantsFetcher = RetryExecutor(attempts: 1, with: VariantsFetcher(), logger: self.logger)
         }
 
         /// Registered defaults are never stored between runs of an application.
@@ -116,16 +124,41 @@ extension SuppyConfig {
     ///
     /// - parameter completion: Called when fetching is complete irrespective of the result.
     @objc public func fetchConfiguration(completion: (() -> Void)? = nil) {
-        logger?.debug("Executing")
-        fetcher.execute(context: context) { result in
+        logger?.debug("Fetching config")
+        configFetcher.execute(context: context) { result in
             switch result {
             case let .success(fetchResult):
                 self.handleSuccessFetch(fetchResult)
             case let .failure(error):
                 self.logger?.error(error)
             }
-            self.logger?.debug("Completed")
+            self.logger?.debug("Completed fetching config")
             completion?()
+        }
+    }
+
+    /// Fetches variants of a configuration.
+    ///
+    /// - parameter completion: Called with a Dictionary<[String: String]> parameter
+    /// when fetching is complete irrespective of the result.
+    @objc public func fetchVariants(completion: (([String: String]) -> Void)? = nil) {
+        logger?.debug("Fetching variants")
+        variantsFetcher.execute(context: context) { result in
+            var variants = [String: String]()
+            switch result {
+            case let .success(fetchResult):
+                switch fetchResult {
+                case let .newData(data):
+                    self.logger?.debug("Completed fetching variants")
+                    variants = Variant.toDictionary(data: data, logger: self.logger)
+                case let .noData(httpStatusCode):
+                    self.logger?.debug("no variants received - HTTP status code: \(httpStatusCode)")
+                }
+            case let .failure(error):
+                self.logger?.error(error)
+            }
+            self.logger?.debug("Completed fetching variants")
+            completion?(variants) // completion must be called
         }
     }
 }

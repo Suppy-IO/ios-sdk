@@ -63,3 +63,25 @@ internal struct Config {
         self.attributes = attributes
     }
 }
+
+/// Structure of resources received from the server.
+internal struct Variant: Codable {
+
+    let key: String
+    let name: String
+
+    static func toDictionary(data: Data, logger: Logger?) -> [String: String] {
+        let decoder = JSONDecoder()
+
+        guard let variants = try? decoder.decode([Variant].self, from: data) else {
+            print("returning empty")
+            return [:]
+        }
+
+        return variants.reduce([String: String]()) { (dict, variant) -> [String: String] in
+            var dict = dict
+            dict[variant.key] = variant.name
+            return dict
+        }
+    }
+}

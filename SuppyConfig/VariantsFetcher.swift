@@ -4,7 +4,7 @@
 
 import Foundation
 
-internal struct ConfigFetcher: DataFetchExecutor {
+internal struct VariantsFetcher: DataFetchExecutor {
 
     private var persistence: Persistence
 
@@ -17,19 +17,13 @@ internal struct ConfigFetcher: DataFetchExecutor {
             return assertionFailure("unable to create URL")
         }
 
-        var request = URLRequest(url: url,
+        let request = URLRequest(url: url,
                                  cachePolicy: .reloadIgnoringLocalAndRemoteCacheData,
                                  timeoutInterval: 30 /* seconds */)
-
-        if let etag = persistence.etag {
-            request.setValue(etag, forHTTPHeaderField: "If-None-Match")
-        }
 
         URLSession
             .shared
             .dataTask(with: request, completionHandler: { data, response, error in
-                // stores ETag if present
-                self.persistence.save(etag: response)
 
                 let result = self.resultFromResponse(data: data,
                                                      response: response,
@@ -79,9 +73,10 @@ internal struct ConfigFetcher: DataFetchExecutor {
 
     private func createUrl(context: Context) -> URL? {
         var components = URLComponents()
-        components.scheme = "https"
-        components.host = "suppy.io"
-        components.path = "/api/clients/\(context.applicationName)"
+        components.scheme = "http"
+        components.host = "localhost"
+        components.port = 3000
+        components.path = "/api/configurations/\(context.configId)/variants"
 
         let configId = URLQueryItem(name: "configId", value: context.configId)
         let anonymousId = URLQueryItem(name: "anonymousId", value: persistence.anonymousId)
@@ -89,10 +84,10 @@ internal struct ConfigFetcher: DataFetchExecutor {
         /// the information below is collected in order to allow for configuration targeting and routing
 
         let deviceModel = URLQueryItem(name: "deviceModel", value: self.deviceModel)
-        let appName = URLQueryItem(name: "appName", value: context.applicationName)
         let appIdentifier = URLQueryItem(name: "bundleIdentifier", value: self.bundleIdentifier)
         let appVersion = URLQueryItem(name: "bundleVersion", value: self.bundleVersion)
         let osVersion = URLQueryItem(name: "osVersion", value: self.osVersion)
+        let appName = URLQueryItem(name: "appName", value: context.applicationName)
 
         /// dependencies mapping to URL parameters
 
