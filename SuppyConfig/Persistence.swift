@@ -42,7 +42,7 @@ internal struct Persistence {
         suite?.set(etag, forKey: SuiteKey.etag)
     }
 
-    func save(variantId: String?) {        
+    func save(variantId: String?) {
         suite?.set(variantId, forKey: SuiteKey.variantId)
     }
 }
