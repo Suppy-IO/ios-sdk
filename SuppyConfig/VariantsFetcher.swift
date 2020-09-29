@@ -73,9 +73,8 @@ internal struct VariantsFetcher: DataFetchExecutor {
 
     private func createUrl(context: Context) -> URL? {
         var components = URLComponents()
-        components.scheme = "http"
-        components.host = "localhost"
-        components.port = 3000
+        components.scheme = "https"
+        components.host = "suppy.io"
         components.path = "/api/configurations/\(context.configId)/variants"
 
         let configId = URLQueryItem(name: "configId", value: context.configId)
