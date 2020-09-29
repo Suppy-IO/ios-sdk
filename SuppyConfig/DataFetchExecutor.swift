@@ -34,11 +34,11 @@ internal extension DataFetchExecutor {
     }
 
     var bundleIdentifier: String {
-        return Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String ?? ""
+        return Bundle.main.infoDictionary?["CFBundleIdentifier"] as? String ?? "bundle identifier"
     }
 
     var bundleVersion: String {
-        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0"
     }
 
     var osVersion: String {
