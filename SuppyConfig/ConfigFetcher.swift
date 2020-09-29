@@ -85,6 +85,7 @@ internal struct ConfigFetcher: DataFetchExecutor {
 
         let configId = URLQueryItem(name: "configId", value: context.configId)
         let anonymousId = URLQueryItem(name: "anonymousId", value: persistence.anonymousId)
+        let variantId = URLQueryItem(name: "variantId", value: persistence.variantId)
 
         /// the information below is collected in order to allow for configuration targeting and routing
 
@@ -109,6 +110,7 @@ internal struct ConfigFetcher: DataFetchExecutor {
             appIdentifier,
             appVersion,
             osVersion,
+            variantId,
             anonymousId,
             dependencyName,
             dependencyType

@@ -10,6 +10,7 @@ internal struct Persistence {
     enum SuiteKey {
         static let anonymousId = "anonymousId"
         static let etag = "etag"
+        static let variantId = "variantId"
     }
 
     let suite = UserDefaults(suiteName: "suppy-config-suite")
@@ -27,6 +28,10 @@ internal struct Persistence {
         suite?.string(forKey: SuiteKey.etag)
     }
 
+    var variantId: String? {
+        suite?.string(forKey: SuiteKey.variantId)
+    }
+
     func save(etag response: URLResponse?) {
         guard
             let httpResponse = response as? HTTPURLResponse,
@@ -35,5 +40,9 @@ internal struct Persistence {
             return
         }
         suite?.set(etag, forKey: SuiteKey.etag)
+    }
+
+    func save(variantId: String?) {        
+        suite?.set(variantId, forKey: SuiteKey.variantId)
     }
 }

@@ -83,6 +83,16 @@ extension SuppyConfig {
         return Persistence().anonymousId
     }
 
+    /// Identifier of the variant to be used.
+    @objc public var variantId: String? {
+        get {
+            Persistence().variantId
+        }
+        set {
+            Persistence().save(variantId: newValue)
+        }
+    }
+
     /// Constructor
     ///
     /// Note on dependencies:
@@ -149,7 +159,6 @@ extension SuppyConfig {
             case let .success(fetchResult):
                 switch fetchResult {
                 case let .newData(data):
-                    self.logger?.debug("Completed fetching variants")
                     variants = Variant.toDictionary(data: data, logger: self.logger)
                 case let .noData(httpStatusCode):
                     self.logger?.debug("no variants received - HTTP status code: \(httpStatusCode)")
